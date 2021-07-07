@@ -92,8 +92,9 @@ Training and rewards as seen after 400 episodes:
 
 ![Training_Episode_reward](https://user-images.githubusercontent.com/40532456/124676310-e8a2d680-de83-11eb-899e-6576c4a6e7d7.png)
 
+The environment is considered solved when average reward (over 100 episodes) of at least +0.5 is achieved.
 
-**Hence the game can be solved with +0.5 score on an average of 100 episodes in 520 episodes. Giving a score of 0.511**
+**Hence the game can be solved with +0.5 score on an average of 100 episodes in 528 episodes. Giving a score of 0.511**
 
 ### Ideas to improve on the results.
 
