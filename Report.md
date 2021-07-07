@@ -11,7 +11,7 @@ In this environment, two agents control rackets to bounce a ball over a net.
 
 ### State Space :
 
-The observation space consists of 8 variables corresponding to the position and velocity of the ball and racket. Each agent receives its own, local observation.
+The state size is 24. The observation space consists of 8 variables corresponding to the position and velocity of the ball and racket. Each agent receives its own, local observation.
 
 ### Action Space :
 
@@ -33,14 +33,20 @@ The environment is considered solved, when the average (over 100 episodes) of th
 ## Neural Network details :
 ### Actor Network :
 ```
-Input layer - 24*2 neurons
+Input layer - 24*2 = 48 neurons
 Hidden layer - 256 neurons
 Hidden layer - 128 neurons
 Output layer - 2 neurons
 ```
 
 ### Critic Network :
-It is similar to actor network but has additions of action neurons in first hidden layer and has only 1 neuron in the output layer. 
+
+```
+Input layer - 24*2 = 48 neurons
+Hidden layer - 256 + (2*2) = 260 neurons
+Hidden layer - 128 neurons
+Output layer - 1 neuron
+```
 
 ### Agent parameters :
 ```
@@ -60,22 +66,29 @@ eps_decay = 500         # Number of episodes to decay over from start to end
 
 ```
 
-1. We have class of Ring buffer with deque of tuple [State , Actions , Reward , Next state , Done ]
-2. We are using Relu after every fully connveted layer.
-3. We are adding actions in the critic network with the second hidden layer.
-4. Two networks for each agent are maintained for each Actor and Critic in order to have a smooth learnings. So we track a total of 4 networks.
-5. We add actions of both the agent to the layer of critic for each individual agents.
+### DDPG parameters.
+```
+number of episodes=3000, 
+```
+### Implementation
 
-### DDPG algorithm.
-```
-number of episodes=1000, 
-```
+1. Two networks are maintained for each Actor and Critic in order to have a smooth learnings.
+2. Actor-Critic model is employed in which the Critic model learns the value function and uses it to determine how the Actor’s policy based model should change.
+3. The Actor brings the advantage of learning in continuous actions space without the need for extra layer of optimization procedures required in a value based function while the Critic supplies the Actor with knowledge of the performance.
+4. The learning rate for both Actor and Critic is 1e-3 with soft update of target set to the same 6e-2.
+5. A Replay buffer maintains the tuple [State , Action , Reward , Next state , Done ]
+6. Relu is used after every fully connveted layer.
+7. Actions of both the agents are added to the layer of critic for each individual agents.
+8. Two networks for each agent are maintained for each Actor and Critic in order to have a smooth learnings. So we actually track a total of 4 networks.
+
 
 ## Final Results :
 
 ### Results for number of episodes.
 
 ![Graph_Episode_score](https://user-images.githubusercontent.com/40532456/124676300-e476b900-de83-11eb-81e4-a195ca248dfd.png)
+
+Training and rewards as seen after 400 episodes:
 
 ![Training_Episode_reward](https://user-images.githubusercontent.com/40532456/124676310-e8a2d680-de83-11eb-899e-6576c4a6e7d7.png)
 
@@ -87,3 +100,4 @@ number of episodes=1000,
 1. Various other algotihms like TRPO, PILCO, PPO, A3C and D4PG can be tested.
 2. PPO can be tried and compared with A2C.
 3. Single actor critic netowork to train both the agents.
+4. Algorithms like Distributed Distributional Deterministic Policy Gradients can be used to compare performance.
